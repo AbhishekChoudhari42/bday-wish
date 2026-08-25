@@ -1001,70 +1001,10 @@
   letterModalClose.addEventListener('click', closeLetter);
   letterModal.addEventListener('click', (e) => { if (e.target === letterModal) closeLetter(); });
 
-  // ---------- ambient motes ----------
-  const motesEl = document.getElementById('motes');
-  for (let i = 0; i < 16; i++) {
-    const s = document.createElement('span');
-    s.style.left = Math.random() * 100 + '%';
-    s.style.bottom = (Math.random() * -20) + 'px';
-    s.style.animationDelay = (Math.random() * 15) + 's';
-    s.style.animationDuration = (11 + Math.random() * 8) + 's';
-    motesEl.appendChild(s);
-  }
+  
 
-  // ---------- placeholder ambient music (Web Audio) ----------
-  let ctx, playing = false, nodes = [];
-  const btn = document.getElementById('music-btn');
-  const label = document.getElementById('music-label');
 
-  function startPlaceholderMusic(){
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const master = ctx.createGain();
-    master.gain.value = 0.05;
-    master.connect(ctx.destination);
-
-    const notes = [261.63, 329.63, 392.00, 523.25]; // C E G C — soft major chord
-    notes.forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      const g = ctx.createGain();
-      g.gain.value = 0;
-      osc.connect(g).connect(master);
-      osc.start();
-
-      const lfo = ctx.createOscillator();
-      lfo.type = 'sine';
-      lfo.frequency.value = 0.06 + i * 0.01;
-      const lfoGain = ctx.createGain();
-      lfoGain.gain.value = 0.5;
-      lfo.connect(lfoGain).connect(g.gain);
-      g.gain.value = 0.5;
-      lfo.start();
-
-      nodes.push(osc, lfo);
-    });
-  }
-
-  function stopPlaceholderMusic(){
-    nodes.forEach(n => { try { n.stop(); } catch(e){} });
-    nodes = [];
-    if (ctx) ctx.close();
-  }
-
-  btn.addEventListener('click', () => {
-    playing = !playing;
-    btn.classList.toggle('playing', playing);
-    if (playing) {
-      startPlaceholderMusic();
-      label.textContent = 'a little something for you';
-      btn.setAttribute('aria-label', 'Pause music');
-    } else {
-      stopPlaceholderMusic();
-      label.textContent = 'play a little music';
-      btn.setAttribute('aria-label', 'Play music');
-    }
-  });
+  
 </script>
 
 </body>
