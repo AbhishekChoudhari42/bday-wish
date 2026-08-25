@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, My Love</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     TOKENS — dark, with bright pink text; deep rose for text that
+     sits on the light paper cards (polaroids, letter, modal).
+     ============================================================ */
+  :root{
+    --bg-top:      #2a1420;   /* dark wine */
+    --bg-bottom:   #180c14;   /* near-black plum */
+    --paper:       #fff8fa;   /* warm near-white, for cards */
+    --paper-line:  #f0d7e3;
+    --pink-1:      #ff9fca;   /* bright light pink accent */
+    --pink:        #ff6fa8;   /* bright medium pink accent */
+    --pink-3:      #e0568f;   /* deep-bright rose */
+    --pink-deep:   #ff4f93;   /* vivid magenta, eyebrow / sign accents */
+    --cake:        #f7c9db;   /* soft pink, for the cake */
+    --ink:         #ffb8dc;   /* bright pink text, for the dark background */
+    --ink-paper:   #96335c;   /* deep rose text, for the light paper cards */
+    --muted:       #c98fac;   /* dim bright pink, secondary text on dark */
+    --serif:       'Cormorant Garamond', serif;
+    --sans:        'Inter', sans-serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:linear-gradient(160deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+    color:var(--ink);
+    font-family:var(--sans);
+    overflow-x:hidden;
+  }
+
+  /* ============================================================
+     DOODLES — small hand-drawn accents, scattered and floating
+     ============================================================ */
+  .doodle{
+    position:absolute;
+    pointer-events:none;
+    animation:doodleBob 7s ease-in-out infinite;
+  }
+  @keyframes doodleBob{
+    0%, 100%{ transform:translateY(0) rotate(var(--r, 0deg)); }
+    50%     { transform:translateY(-8px) rotate(var(--r, 0deg)); }
+  }
+
+  /* ---------- confetti canvas ---------- */
+  #confetti-canvas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:999;
+  }
+
+  /* ============================================================
+     AMBIENT DOTS — soft floating pink motes, mobile-scaled
+     ============================================================ */
+  .motes{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  .motes span{
+    position:absolute;
+    width:5px; height:5px;
+    border-radius:50%;
+    opacity:.6;
+    animation:drift 15s linear infinite;
+  }
+  .motes span:nth-child(odd){ background:var(--pink-1); }
+  .motes span:nth-child(even){ background:var(--pink); }
+  @keyframes drift{
+    0%   { transform:translateY(0) translateX(0); opacity:0; }
+    12%  { opacity:.6; }
+    88%  { opacity:.6; }
+    100% { transform:translateY(-100vh) translateX(16px); opacity:0; }
+  }
+
+  /* ============================================================
+     HERO — mobile-first sizing throughout
+     ============================================================ */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    position:relative;
+    padding:0 20px;
+  }
+  .hero .eyebrow{
+    font-family:var(--sans);
+    font-size:11px;
+    letter-spacing:.26em;
+    text-transform:uppercase;
+    color:var(--pink-deep);
+    margin-bottom:18px;
+    opacity:0;
+    animation:fadeUp 1.2s ease forwards .2s;
+  }
+  .hero h1{
+    font-family:var(--serif);
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(2rem, 9vw, 4.6rem);
+    line-height:1.16;
+    max-width:15ch;
+    color:var(--ink);
+    opacity:0;
+    animation:fadeUp 1.4s ease forwards .5s;
+  }
+  .hero p.sub{
+    margin-top:18px;
+    font-size:14px;
+    letter-spacing:.02em;
+    color:var(--muted);
+    max-width:32ch;
+    opacity:0;
+    animation:fadeUp 1.4s ease forwards .9s;
+  }
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:30px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    opacity:0;
+    animation:fadeUp 1s ease forwards 1.6s;
+  }
+  .scroll-cue span{
+    font-size:10px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .scroll-cue .chevron{
+    width:8px; height:8px;
+    border-right:1px solid var(--pink-3);
+    border-bottom:1px solid var(--pink-3);
+    transform:rotate(45deg);
+    animation:bob 1.8s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{ transform:rotate(45deg) translate(0,0); }
+    50%{ transform:rotate(45deg) translate(3px,3px); }
+  }
+
+  /* ============================================================
+     GAME — blow out the candle, make a wish
+     ============================================================ */
+  .game{
+    position:relative;
+    min-height:80vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:80px 20px;
+  }
+  .game-eyebrow{
+    font-family:var(--sans);
+    font-size:11px;
+    letter-spacing:.26em;
+    text-transform:uppercase;
+    color:var(--pink-deep);
+    margin-bottom:10px;
+  }
+  .game-title{
+    font-family:var(--serif);
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(1.7rem, 6vw, 2.6rem);
+    color:var(--ink);
+  }
+  .game-sub{
+    margin-top:10px;
+    font-size:13px;
+    color:var(--muted);
+    max-width:30ch;
+  }
+
+  .cake{
+    position:relative;
+    margin-top:44px;
+    width:min(60vw, 200px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .candle{ position:relative; width:9px; height:38px; z-index:2; }
+  .candle .stick{
+    position:absolute;
+    bottom:0; left:0;
+    width:9px; height:38px;
+    background:linear-gradient(to bottom, var(--pink), var(--pink-1));
+    border-radius:2px;
+  }
+  .candle .flame{
+    position:absolute;
+    top:-16px; left:50%;
+    transform:translateX(-50%);
+    width:12px; height:18px;
+    background:radial-gradient(circle at 50% 30%, #fff6d8, #f6c86b 60%, #e08a3c 100%);
+    border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+    box-shadow:0 0 12px 3px rgba(246,200,107,.6);
+    cursor:pointer;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .candle.out .flame{
+    opacity:0;
+    transform:translateX(-50%) scale(.3);
+    pointer-events:none;
+  }
+  .candle .smoke{
+    position:absolute;
+    top:-16px; left:50%;
+    width:6px; height:6px;
+    border-radius:50%;
+    background:rgba(230,210,220,.6);
+    opacity:0;
+    transform:translateX(-50%);
+  }
+  .candle.puff .smoke{ animation:smokeRise .8s ease forwards; }
+  @keyframes smokeRise{
+    0%   { opacity:.6; transform:translateX(-50%) translateY(0) scale(1); }
+    100% { opacity:0; transform:translateX(-50%) translateY(-28px) scale(2.3); }
+  }
+
+  .cake-top{
+    width:100%; height:20px;
+    background:var(--paper);
+    border-radius:50% 50% 6px 6px / 70% 70% 6px 6px;
+    margin-bottom:-1px;
+    z-index:1;
+    box-shadow:0 4px 10px -6px rgba(0,0,0,.35);
+  }
+  .cake-body{
+    width:100%; height:78px;
+    background:var(--cake);
+    border-radius:0 0 16px 16px;
+    box-shadow:0 16px 30px -16px rgba(0,0,0,.5);
+  }
+  .cake-plate{
+    width:118%; height:9px;
+    background:var(--paper-line);
+    border-radius:50%;
+    margin-top:8px;
+    opacity:.5;
+  }
+
+  .relight-btn{
+    margin-top:26px;
+    padding:10px 20px;
+    border:1px solid var(--paper-line);
+    border-radius:999px;
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--sans);
+    font-size:12px;
+    cursor:pointer;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .5s ease;
+  }
+  .relight-btn.visible{ opacity:1; pointer-events:auto; }
+
+  /* ---------- wish pop-up ---------- */
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(15, 6, 11, .68);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    z-index:1000;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .35s ease;
+  }
+  .modal-overlay.visible{ opacity:1; visibility:visible; }
+  .modal-card{
+    position:relative;
+    background:var(--paper);
+    border-radius:14px;
+    padding:36px 28px 30px;
+    max-width:320px;
+    text-align:center;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.55);
+    transform:scale(.85) translateY(10px);
+    transition:transform .4s cubic-bezier(.3,1.4,.4,1);
+  }
+  .modal-overlay.visible .modal-card{ transform:scale(1) translateY(0); }
+  .modal-card .modal-emoji{ font-size:28px; margin-bottom:12px; }
+  .modal-card p{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:19px;
+    line-height:1.5;
+    color:var(--ink-paper);
+  }
+  .modal-card p + p{
+    margin-top:14px;
+    font-size:15px;
+  }
+  .modal-card .modal-sign{
+    display:block;
+    margin-top:14px;
+    font-family:var(--sans);
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--pink-3);
+  }
+  .modal-close{
+    position:absolute;
+    top:10px; right:14px;
+    font-size:18px;
+    color:var(--muted);
+    cursor:pointer;
+    line-height:1;
+  }
+
+  /* ---------- letter card: a scrollable variant of the modal, for longer text ---------- */
+  .letter-card{
+    max-width:360px;
+    max-height:78vh;
+    overflow-y:auto;
+    text-align:left;
+    padding:34px 26px 28px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .letter-card .letter-salutation{
+    font-size:18px;
+    margin-bottom:14px;
+  }
+  .letter-card p{
+    margin-bottom:13px;
+    font-size:14.5px;
+  }
+  .letter-card p:last-of-type{ margin-bottom:0; }
+  .letter-card .letter-sign{
+    margin-top:18px;
+    font-family:var(--sans);
+    font-style:normal;
+    font-size:12px;
+    letter-spacing:.03em;
+    text-align:right;
+    color:var(--pink-3);
+  }
+
+  /* ============================================================
+     GALLERY — mobile-first: single column, thread on the left.
+     Desktop enhancement (alternating sides) lives in the media
+     query at the bottom.
+     ============================================================ */
+  .gallery{
+    position:relative;
+    padding:80px 20px 120px 52px;
+    max-width:1000px;
+    margin:0 auto;
+  }
+  .gallery::before{
+    content:"";
+    position:absolute;
+    top:0; bottom:0; left:22px;
+    width:1px;
+    background:repeating-linear-gradient(
+      to bottom, var(--pink-1) 0 6px, transparent 6px 13px
+    );
+  }
+
+  .photo-item{
+    position:relative;
+    margin-bottom:64px;
+    opacity:0;
+    transform:translateY(30px);
+    transition:opacity .8s ease, transform .8s ease;
+  }
+  .photo-item.visible{ opacity:1; transform:translateY(0); }
+
+  .polaroid-wrap{
+    width:min(72vw, 260px);
+    position:relative;
+  }
+  .polaroid-wrap::before{
+    content:"";
+    position:absolute;
+    top:16px; left:-30px;
+    width:9px; height:9px;
+    border-radius:50%;
+    box-shadow:0 0 0 4px var(--bg-top);
+  }
+  .photo-item:nth-child(odd)  .polaroid-wrap::before{ background:var(--pink-1); }
+  .photo-item:nth-child(even) .polaroid-wrap::before{ background:var(--pink); }
+  .photo-item:nth-child(odd)  .polaroid-wrap{ transform:rotate(-2deg); }
+  .photo-item:nth-child(even) .polaroid-wrap{ transform:rotate(2deg); }
+
+  .polaroid{
+    background:var(--paper);
+    padding:12px 12px 18px;
+    border-radius:3px;
+    box-shadow:0 16px 32px -14px rgba(0,0,0,.5);
+    cursor:pointer;
+    perspective:1200px;
+  }
+  .polaroid .frame{
+    position:relative;
+    width:100%;
+    aspect-ratio:4/5;
+    transform-style:preserve-3d;
+    transition:transform .7s cubic-bezier(.4,.2,.2,1);
+  }
+  .polaroid.flipped .frame{ transform:rotateY(180deg); }
+
+  .face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:1px;
+    overflow:hidden;
+  }
+  .face.front img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+    filter:saturate(.95) contrast(1.02);
+  }
+  .face.back{
+    transform:rotateY(180deg);
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    text-align:center;
+  }
+  .face.back p{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:14px;
+    line-height:1.5;
+    color:var(--ink-paper);
+  }
+
+  .caption{
+    margin-top:10px;
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:14px;
+    color:var(--ink);
+  }
+  .tap-hint{
+    display:block;
+    margin-top:3px;
+    font-family:var(--sans);
+    font-size:9px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* ============================================================
+     CLOSING
+     ============================================================ */
+  .closing{
+    min-height:60vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:70px 20px 120px;
+    position:relative;
+  }
+  .closing .line{
+    width:36px; height:1px;
+    background:linear-gradient(to right, var(--pink-1), var(--pink));
+    margin-bottom:24px;
+    opacity:0;
+    transform:scaleX(0);
+    transition:opacity .8s ease, transform .8s ease;
+  }
+  .closing .line.visible{ opacity:1; transform:scaleX(1); }
+  .closing-lead{
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--muted);
+    margin-bottom:34px;
+  }
+
+  /* ---------- envelope: flap + seal open, then the letter card appears ---------- */
+  .envelope{
+    position:relative;
+    width:min(78vw, 240px);
+    height:150px;
+    margin:0 auto;
+    cursor:pointer;
+  }
+  .envelope-body{
+    position:absolute; inset:0;
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    border-radius:6px;
+    box-shadow:0 18px 34px -16px rgba(0,0,0,.5);
+    z-index:1;
+  }
+  .envelope-flap{
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:74px;
+    background:linear-gradient(160deg, var(--pink), var(--pink-1));
+    clip-path:polygon(0 0, 100% 0, 50% 92%);
+    transform-origin:top center;
+    transition:transform .7s ease;
+    z-index:3;
+  }
+  .seal{
+    position:absolute;
+    top:50px; left:50%;
+    transform:translate(-50%, -50%);
+    width:32px; height:32px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--pink-1), var(--pink));
+    box-shadow:0 4px 10px -3px rgba(0,0,0,.5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    z-index:4;
+    transition:opacity .35s ease, transform .35s ease;
+  }
+  .envelope.open .envelope-flap{ transform:rotateX(180deg); }
+  .envelope.open .seal{ opacity:0; transform:translate(-50%, -50%) scale(.4); }
+
+  .envelope-hint{
+    margin-top:18px;
+    font-size:10px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    transition:opacity .4s ease;
+  }
+  .envelope-hint.hidden{ opacity:0; }
+
+  /* ============================================================
+     MUSIC TOGGLE
+     ============================================================ */
+  .music-btn{
+    position:fixed;
+    bottom:20px; right:18px;
+    width:48px; height:48px;
+    border-radius:50%;
+    background:var(--paper);
+    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:0 10px 22px -8px rgba(0,0,0,.5);
+    z-index:50;
+  }
+  .music-btn .disc{
+    width:20px; height:20px;
+    border-radius:50%;
+    background:conic-gradient(var(--pink-1), var(--pink), var(--pink-1));
+    position:relative;
+    transition:transform .3s ease;
+  }
+  .music-btn .disc::after{
+    content:"";
+    position:absolute;
+    inset:7px;
+    border-radius:50%;
+    background:var(--paper);
+  }
+  .music-btn.playing .disc{ animation:spin 3.5s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .music-label{
+    position:fixed;
+    bottom:28px; right:74px;
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+    z-index:50;
+    pointer-events:none;
+    max-width:120px;
+    text-align:right;
+  }
+
+  /* ============================================================
+     DESKTOP ENHANCEMENT — thread moves to center, photos alternate
+     sides. Mobile styles above remain the primary experience.
+     ============================================================ */
+  @media (min-width: 720px){
+    .gallery{ padding:120px 24px 160px; }
+    .gallery::before{ left:50%; }
+    .photo-item{ display:flex; justify-content:center; margin-bottom:100px; }
+    .polaroid-wrap{ width:300px; }
+    .polaroid-wrap::before{ top:-8px; left:50%; transform:translateX(-50%); }
+    .photo-item:nth-child(odd)  .polaroid-wrap{ margin-right:auto; transform:rotate(-3deg); }
+    .photo-item:nth-child(even) .polaroid-wrap{ margin-left:auto; transform:rotate(3deg); }
+    .caption{ text-align:center; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- doodle shapes, reused by <use> everywhere below -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <path id="doodle-heart" d="M12 20s-6.5-4-8.5-7.8C1.7 9 3.8 5.5 7 5.5c2 0 3.7 1.1 5 3 1.3-1.9 3-3 5-3 3.2 0 5.3 3.5 3.5 6.7C18.5 16 12 20 12 20z"/>
+    <path id="doodle-spark" d="M12 2c0 5 1 7 6 8-5 1-6 3-6 8 0-5-1-7-6-8 5-1 6-3 6-8z"/>
+    <path id="doodle-swirl" d="M2 8c5-6 10 6 15 0s10 6 15 0" fill="none" stroke-width="2" stroke-linecap="round"/>
+  </defs>
+</svg>
+
+<!-- ============================================================
+     HERO
+     EDIT: swap "Leo" for his name, and tweak the two lines below
+     ============================================================ -->
+<section class="hero">
+  <div class="motes" id="motes"></div>
+
+  <svg class="doodle" style="top:10%; left:7%; width:26px; height:26px; --r:-10deg;" viewBox="0 0 24 24" fill="var(--pink-1)" opacity="0.55"><use href="#doodle-heart"/></svg>
+  <svg class="doodle" style="top:16%; right:9%; width:20px; height:20px; --r:6deg; animation-delay:1s;" viewBox="0 0 24 24" fill="var(--pink-deep)" opacity="0.6"><use href="#doodle-spark"/></svg>
+  <svg class="doodle" style="bottom:16%; left:11%; width:40px; height:16px; --r:0deg; animation-delay:2s;" viewBox="0 0 40 16" fill="none" stroke="var(--pink)" opacity="0.5"><use href="#doodle-swirl"/></svg>
+
+  <div class="eyebrow">for TEJAS</div>
+  <h1>Happy Birthday,<br>my favorite person</h1>
+  <p class="sub">A little walk through some of my favorite moments with you, so far.</p>
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="chevron"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GAME
+     Tap the candle flame to blow it out. A little pop-up wish
+     appears with a confetti shower. Tap "light it again" to replay.
+     ============================================================ -->
+<section class="game" id="game">
+  <svg class="doodle" style="top:8%; right:8%; width:24px; height:24px; --r:8deg;" viewBox="0 0 24 24" fill="var(--pink-1)" opacity="0.5"><use href="#doodle-heart"/></svg>
+  <svg class="doodle" style="bottom:10%; left:8%; width:18px; height:18px; --r:-6deg; animation-delay:1.4s;" viewBox="0 0 24 24" fill="var(--pink-deep)" opacity="0.55"><use href="#doodle-spark"/></svg>
+
+  <div class="game-eyebrow">a little game</div>
+  <h2 class="game-title">Blow out the candle</h2>
+  <p class="game-sub">Tap the flame — then make a wish.</p>
+
+  <div class="cake">
+    <div class="candle" id="candle"><div class="flame"></div><div class="smoke"></div><div class="stick"></div></div>
+    <div class="cake-top"></div>
+    <div class="cake-body"></div>
+    <div class="cake-plate"></div>
+  </div>
+
+  <button class="relight-btn" id="relight-btn">light it again</button>
+</section>
+
+<!-- wish pop-up -->
+<div class="modal-overlay" id="wish-modal">
+  <div class="modal-card">
+    <div class="modal-close" id="modal-close">&times;</div>
+    <div class="modal-emoji">🎂</div>
+    <p>Happy birthday — I hope every wish comes true.</p>
+    <p>May life give you everything your heart wishes for, and may every little dream of yours come true. You deserve all the happiness in the world. 🥰</p>
+    <span class="modal-sign">made just for you</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     GALLERY
+     EDIT: replace each img src with your own photo, and edit the
+     caption + the little note on the back of each polaroid.
+     Tap a photo to flip it over.
+     ============================================================ -->
+<section class="gallery" id="gallery">
+
+  <svg class="doodle" style="top:2%; right:4%; width:34px; height:14px; --r:2deg;" viewBox="0 0 40 16" fill="none" stroke="var(--pink-1)" opacity="0.45"><use href="#doodle-swirl"/></svg>
+  <svg class="doodle" style="bottom:4%; left:2%; width:22px; height:22px; --r:-8deg; animation-delay:0.8s;" viewBox="0 0 24 24" fill="var(--pink)" opacity="0.5"><use href="#doodle-heart"/></svg>
+
+  <div class="photo-item">
+    <div class="polaroid-wrap">
+      <div class="polaroid" onclick="flipCard(this, event)">
+        <div class="frame">
+          <div class="face front">
+            <img src="./quietmoments.png" alt="A quiet moment together">
+          </div>
+          <div class="face back"><p>In these quiet moments with you, I forget the whole world exists. Just your presence, your warmth, and the way my heart feels when I'm close to you… that's all I need. ❤️</p></div>
+        </div>
+      </div>
+      <div class="caption">quiet moments<span class="tap-hint">tap the photo</span></div>
+    </div>
+  </div>
+
+  <div class="photo-item">
+    <div class="polaroid-wrap">
+      <div class="polaroid" onclick="flipCard(this, event)">
+        <div class="frame">
+          <div class="face front">
+            <img src="./walktogether.png" alt="Walking together">
+          </div>
+          <div class="face back"><p>Walking beside you, hand in hand, feels like the simplest and sweetest kind of love. I could stay in moments like this forever. ❤️</p></div>
+        </div>
+      </div>
+      <div class="caption">walk together<span class="tap-hint">tap the photo</span></div>
+    </div>
+  </div>
+
+  <div class="photo-item">
+    <div class="polaroid-wrap">
+      <div class="polaroid" onclick="flipCard(this, event)">
+        <div class="frame">
+          <div class="face front">
+            <img src="./laughtogether.png" alt="Laughing together">
+          </div>
+          <div class="face back"><p>Your laugh makes every moment with you feel a little more magical. ❤️</p></div>
+        </div>
+      </div>
+      <div class="caption">laugh together<span class="tap-hint">tap the photo</span></div>
+    </div>
+  </div>
+
+  <div class="photo-item">
+    <div class="polaroid-wrap">
+      <div class="polaroid" onclick="flipCard(this, event)">
+        <div class="frame">
+          <div class="face front">
+            <img src="./handinhand.png" alt="Hands together">
+          </div>
+          <div class="face back"><p>Two hearts, one journey, hand in hand forever. ✨</p></div>
+        </div>
+      </div>
+      <div class="caption">hand in hand<span class="tap-hint">tap the photo</span></div>
+    </div>
+  </div>
+
+  <div class="photo-item">
+    <div class="polaroid-wrap">
+      <div class="polaroid" onclick="flipCard(this, event)">
+        <div class="frame">
+          <div class="face front">
+            <img src="./tworings.png" alt="Two rings">
+          </div>
+          <div class="face back"><p>Two souls, two rings, one journey called forever. 💕<br>A little circle of love, sealed with a promise of forever. 💍❤️</p></div>
+        </div>
+      </div>
+      <div class="caption">two rings<span class="tap-hint">tap the photo</span></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     CLOSING
+     EDIT: your closing note + sign-off
+     ============================================================ -->
+<section class="closing" id="closing">
+  <svg class="doodle" style="top:6%; left:9%; width:22px; height:22px; --r:-10deg;" viewBox="0 0 24 24" fill="var(--pink-deep)" opacity="0.5"><use href="#doodle-spark"/></svg>
+  <svg class="doodle" style="bottom:8%; right:8%; width:24px; height:24px; --r:8deg; animation-delay:1.2s;" viewBox="0 0 24 24" fill="var(--pink-1)" opacity="0.5"><use href="#doodle-heart"/></svg>
+
+  <div class="line" id="closing-line"></div>
+  <p class="closing-lead">one more thing</p>
+
+  <div class="envelope" id="envelope">
+    <div class="envelope-body"></div>
+    <div class="envelope-flap"></div>
+    <div class="seal">🤍</div>
+  </div>
+  <p class="envelope-hint" id="envelope-hint">tap to open</p>
+</section>
+
+<!-- the letter, in full — opens as a scrollable card when the envelope is tapped -->
+<div class="modal-overlay" id="letter-modal">
+  <div class="modal-card letter-card">
+    <div class="modal-close" id="letter-modal-close">&times;</div>
+    <p class="letter-salutation">My Love, ❤️</p>
+    <p>Happy Birthday to the one who has made these past three months so beautiful and special. 🥰</p>
+    <p>In such a short time, we've created so many memories, shared countless smiles, and grown so much closer. I love how comfortable I feel with you and how even the simplest moments become special when they're with you.</p>
+    <p>Being engaged to you feels like the beginning of something truly beautiful. I'm so excited for all the moments, adventures, laughter, and memories waiting for us ahead.</p>
+    <p>Today, I just want you to know how grateful I am to have you in my life. May I always be by your side — holding your hand, annoying you, loving you, and growing old with you. ❤️💍</p>
+    <p>Happy Birthday, my love. Here's to us and our forever. ❤️</p>
+    <p class="letter-sign">Yours,<br>Sayali ❤️</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     MUSIC
+     Soft generated placeholder tune, so the page has something to
+     play right away. To use your own song instead, delete the
+     script block at the bottom and uncomment the <audio> tag,
+     pointing src at your file.
+     ============================================================ -->
+<audio id="song" src="./bday.mp3" loop></audio>
+<canvas id="confetti-canvas"></canvas>
+
+<span class="music-label" id="music-label">play a little music</span>
+<button class="music-btn" id="music-btn" aria-label="Play music">
+  <div class="disc"></div>
+</button>
+
+<script>
+  // ---------- scroll reveal ----------
+  const revealTargets = document.querySelectorAll('.photo-item, #closing-line, .closing-lead');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.3 });
+  revealTargets.forEach(t => io.observe(t));
+
+  // ---------- confetti engine ----------
+  const confettiCanvas = document.getElementById('confetti-canvas');
+  const cctx = confettiCanvas.getContext('2d');
+  function resizeConfettiCanvas(){
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+  }
+  resizeConfettiCanvas();
+  window.addEventListener('resize', resizeConfettiCanvas);
+
+  const confettiColors = ['#ff9fca', '#ff6fa8', '#e0568f', '#ffffff', '#ffe3ef'];
+  let confettiPieces = [];
+  let confettiRunning = false;
+
+  function spawnConfetti(x, y, count = 40){
+    for (let i = 0; i < count; i++){
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 5;
+      confettiPieces.push({
+        x, y,
+        vx: Math.cos(angle) * speed * (Math.random() * 0.6 + 0.4),
+        vy: Math.sin(angle) * speed - 4 - Math.random() * 3,
+        size: 4 + Math.random() * 4,
+        color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+        rotation: Math.random() * 360,
+        rotSpeed: (Math.random() - 0.5) * 10,
+        life: 1,
+        decay: 0.006 + Math.random() * 0.006
+      });
+    }
+    if (!confettiRunning){ confettiRunning = true; requestAnimationFrame(animateConfetti); }
+  }
+
+  function animateConfetti(){
+    cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    confettiPieces.forEach(p => {
+      p.vy += 0.12;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rotation += p.rotSpeed;
+      p.life -= p.decay;
+    });
+    confettiPieces = confettiPieces.filter(p => p.life > 0 && p.y < confettiCanvas.height + 40);
+    confettiPieces.forEach(p => {
+      cctx.save();
+      cctx.translate(p.x, p.y);
+      cctx.rotate(p.rotation * Math.PI / 180);
+      cctx.globalAlpha = Math.max(p.life, 0);
+      cctx.fillStyle = p.color;
+      cctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      cctx.restore();
+    });
+    if (confettiPieces.length > 0){
+      requestAnimationFrame(animateConfetti);
+    } else {
+      confettiRunning = false;
+      cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    }
+  }
+
+  // a soft, understated two-note chime — no bright sparkle sweep
+  function playTwinkle(){
+    try {
+      const c = new (window.AudioContext || window.webkitAudioContext)();
+      const now = c.currentTime;
+      const notes = [523.25, 659.25]; // a gentle, warm interval (C5, E5)
+      notes.forEach((freq, i) => {
+        const o = c.createOscillator();
+        const g = c.createGain();
+        o.type = 'sine';
+        o.frequency.value = freq;
+        const start = now + i * 0.05;
+        g.gain.setValueAtTime(0.0001, start);
+        g.gain.linearRampToValueAtTime(0.045, start + 0.08);
+        g.gain.exponentialRampToValueAtTime(0.0001, start + 1.1);
+        o.connect(g).connect(c.destination);
+        o.start(start);
+        o.stop(start + 1.2);
+      });
+      setTimeout(() => c.close(), 1400);
+    } catch(e){}
+  }
+
+  // flip a polaroid + a small confetti pop where it was tapped
+  function flipCard(el, evt){
+    el.classList.toggle('flipped');
+    const rect = el.getBoundingClientRect();
+    spawnConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2, 14);
+  }
+
+  // soft, breathy "blow" sound for the candle
+  function playPuff(){
+    try {
+      const c = new (window.AudioContext || window.webkitAudioContext)();
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(220, c.currentTime);
+      o.frequency.exponentialRampToValueAtTime(70, c.currentTime + 0.3);
+      g.gain.setValueAtTime(0.04, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.35);
+      o.connect(g).connect(c.destination);
+      o.start();
+      o.stop(c.currentTime + 0.35);
+      setTimeout(() => c.close(), 450);
+    } catch(e){}
+  }
+
+  // ---------- the game: blow out the candle, make a wish ----------
+  const candle = document.getElementById('candle');
+  const relightBtn = document.getElementById('relight-btn');
+  const wishModal = document.getElementById('wish-modal');
+  const modalClose = document.getElementById('modal-close');
+
+  function openWishModal(){
+    wishModal.classList.add('visible');
+  }
+  function closeWishModal(){
+    wishModal.classList.remove('visible');
+  }
+  modalClose.addEventListener('click', closeWishModal);
+  wishModal.addEventListener('click', (e) => { if (e.target === wishModal) closeWishModal(); });
+
+  candle.querySelector('.flame').addEventListener('click', () => {
+    if (candle.classList.contains('out')) return;
+    candle.classList.add('out', 'puff');
+    const rect = candle.getBoundingClientRect();
+    spawnConfetti(rect.left + rect.width / 2, rect.top, 12);
+    playPuff();
+
+    setTimeout(() => {
+      spawnConfetti(window.innerWidth * 0.5, window.innerHeight * 0.35, 80);
+      spawnConfetti(window.innerWidth * 0.2, window.innerHeight * 0.25, 40);
+      spawnConfetti(window.innerWidth * 0.8, window.innerHeight * 0.25, 40);
+      playTwinkle();
+      openWishModal();
+      relightBtn.classList.add('visible');
+    }, 350);
+  });
+
+  relightBtn.addEventListener('click', () => {
+    candle.classList.remove('out', 'puff');
+    relightBtn.classList.remove('visible');
+    closeWishModal();
+  });
+
+  // ---------- the letter: tap the envelope to open it ----------
+  const envelope = document.getElementById('envelope');
+  const envelopeHint = document.getElementById('envelope-hint');
+  const letterModal = document.getElementById('letter-modal');
+  const letterModalClose = document.getElementById('letter-modal-close');
+
+  function openLetter(){
+    envelope.classList.add('open');
+    envelopeHint.classList.add('hidden');
+    letterModal.classList.add('visible');
+    const rect = envelope.getBoundingClientRect();
+    spawnConfetti(rect.left + rect.width / 2, rect.top, 60);
+    spawnConfetti(window.innerWidth * 0.2, 20, 28);
+    spawnConfetti(window.innerWidth * 0.8, 20, 28);
+    playTwinkle();
+  }
+  function closeLetter(){
+    letterModal.classList.remove('visible');
+    envelope.classList.remove('open');
+    envelopeHint.classList.remove('hidden');
+  }
+
+  envelope.addEventListener('click', () => {
+    if (!envelope.classList.contains('open')) openLetter();
+  });
+  letterModalClose.addEventListener('click', closeLetter);
+  letterModal.addEventListener('click', (e) => { if (e.target === letterModal) closeLetter(); });
+
+  // ---------- ambient motes ----------
+  const motesEl = document.getElementById('motes');
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement('span');
+    s.style.left = Math.random() * 100 + '%';
+    s.style.bottom = (Math.random() * -20) + 'px';
+    s.style.animationDelay = (Math.random() * 15) + 's';
+    s.style.animationDuration = (11 + Math.random() * 8) + 's';
+    motesEl.appendChild(s);
+  }
+
+  // ---------- background music (real audio file) ----------
+  let playing = false;
+  const btn = document.getElementById('music-btn');
+  const label = document.getElementById('music-label');
+  const song = document.getElementById('song');
+
+  btn.addEventListener('click', () => {
+    playing = !playing;
+    btn.classList.toggle('playing', playing);
+    if (playing) {
+      song.play().catch(() => {});
+      label.textContent = 'a little something for you';
+      btn.setAttribute('aria-label', 'Pause music');
+    } else {
+      song.pause();
+      label.textContent = 'play a little music';
+      btn.setAttribute('aria-label', 'Play music');
+    }
+  });
+</script>
+
+</body>
+</html>
