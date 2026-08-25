@@ -420,7 +420,7 @@
   .polaroid .frame{
     position:relative;
     width:100%;
-    aspect-ratio:4/5;
+    aspect-ratio:4/5; /* fallback until the real image loads and sets its own ratio */
     transform-style:preserve-3d;
     transition:transform .7s cubic-bezier(.4,.2,.2,1);
   }
@@ -703,7 +703,7 @@
       <div class="polaroid" onclick="flipCard(this, event)">
         <div class="frame">
           <div class="face front">
-            <img src="./quietmoments.jpg" alt="A quiet moment together">
+            <img src="./quietmoments.png" alt="A quiet moment together">
           </div>
           <div class="face back"><p>In these quiet moments with you, I forget the whole world exists. Just your presence, your warmth, and the way my heart feels when I'm close to you… that's all I need. ❤️</p></div>
         </div>
@@ -717,7 +717,7 @@
       <div class="polaroid" onclick="flipCard(this, event)">
         <div class="frame">
           <div class="face front">
-            <img src="./walktogether.jpg" alt="Walking together">
+            <img src="./walktogether.png" alt="Walking together">
           </div>
           <div class="face back"><p>Walking beside you, hand in hand, feels like the simplest and sweetest kind of love. I could stay in moments like this forever. ❤️</p></div>
         </div>
@@ -731,7 +731,7 @@
       <div class="polaroid" onclick="flipCard(this, event)">
         <div class="frame">
           <div class="face front">
-            <img src="./laughtogether.jpg" alt="Laughing together">
+            <img src="./laughtogether.png" alt="Laughing together">
           </div>
           <div class="face back"><p>Your laugh makes every moment with you feel a little more magical. ❤️</p></div>
         </div>
@@ -745,7 +745,7 @@
       <div class="polaroid" onclick="flipCard(this, event)">
         <div class="frame">
           <div class="face front">
-            <img src="./handinhand.jpg" alt="Hands together">
+            <img src="./handinhand.png" alt="Hands together">
           </div>
           <div class="face back"><p>Two hearts, one journey, hand in hand forever. ✨</p></div>
         </div>
@@ -759,7 +759,7 @@
       <div class="polaroid" onclick="flipCard(this, event)">
         <div class="frame">
           <div class="face front">
-            <img src="./tworings.jpg" alt="Two rings">
+            <img src="./tworings.png" alt="Two rings">
           </div>
           <div class="face back"><p>Two souls, two rings, one journey called forever. 💕<br>A little circle of love, sealed with a promise of forever. 💍❤️</p></div>
         </div>
@@ -819,6 +819,18 @@
 </button>
 
 <script>
+  // ---------- size each polaroid to match its own photo's aspect ratio ----------
+  document.querySelectorAll('.polaroid .face.front img').forEach(img => {
+    const applyRatio = () => {
+      if (img.naturalWidth && img.naturalHeight) {
+        const frame = img.closest('.frame');
+        if (frame) frame.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+      }
+    };
+    if (img.complete) applyRatio();
+    else img.addEventListener('load', applyRatio);
+  });
+
   // ---------- scroll reveal ----------
   const revealTargets = document.querySelectorAll('.photo-item, #closing-line, .closing-lead');
   const io = new IntersectionObserver((entries) => {
